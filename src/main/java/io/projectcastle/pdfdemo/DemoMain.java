@@ -51,6 +51,8 @@ public class DemoMain extends AbstractVerticle {
             if (req.uri().equals("/")) {
                 // Serve the index page
                 req.response().sendFile("index.html");
+            }   else if (req.uri().equals("/favicon.ico")) {
+                req.response().sendFile("favicon.ico");
             } else if (req.uri().startsWith("/form")) {
                 req.pause();
                 final String filename = "uploaded.pdf";
