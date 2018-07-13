@@ -22,7 +22,6 @@
 package io.projectcastle.pdfdemo;
 
 import java.io.File;
-import java.util.UUID;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -54,17 +53,17 @@ public class DemoMain extends AbstractVerticle {
                 req.response().sendFile("index.html");
             } else if (req.uri().startsWith("/form")) {
                 req.pause();
-                String filename = UUID.randomUUID() + ".uploaded";
-                vertx.fileSystem().open(filename, new OpenOptions(), ares -> {
-                  AsyncFile file = ares.result();
-                  Pump pump = Pump.pump(req, file);
-                  req.endHandler(v1 -> file.close(v2 -> {
-                      String plaintText = this.file2Text(filename);
-                      req.response().setChunked(true).putHeader("Content-Type", "text/plain").end(plaintText);
-                    System.out.println("Uploaded to " + filename);
-                  }));
-                  pump.start();
-                  req.resume();
+                final String filename = "uploaded.pdf";
+                this.vertx.fileSystem().open(filename, new OpenOptions(), ares -> {
+                    final AsyncFile file = ares.result();
+                    final Pump pump = Pump.pump(req, file);
+                    req.endHandler(v1 -> file.close(v2 -> {
+                        final String plaintText = this.file2Text(filename);
+                        req.response().setChunked(true).putHeader("Content-Type", "text/plain").end(plaintText);
+                        System.out.println("Uploaded to " + filename);
+                    }));
+                    pump.start();
+                    req.resume();
 
                 });
             } else {
