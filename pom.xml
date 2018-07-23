@@ -12,6 +12,8 @@
 		<!-- Software versions -->
 		<java.version>1.8</java.version>
 		<vertx.version>3.5.2</vertx.version>
+		<pdfbox.version>1.8.15</pdfbox.version><!-- 2.0.11 -->
+		<bouncycastle.version>1.46</bouncycastle.version>
 	</properties>
 	<build>
 		<plugins>
@@ -67,13 +69,13 @@
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk16</artifactId>
-			<version>1.45</version>
+			<version>${bouncycastle.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
-			<version>2.0.4</version>
+			<version>${pdfbox.version}</version>
 		</dependency>
 
 		<dependency>

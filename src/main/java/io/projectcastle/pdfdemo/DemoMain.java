@@ -24,7 +24,9 @@ package io.projectcastle.pdfdemo;
 import java.io.File;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.pdmodel.encryption.StandardDecryptionMaterial;
+//import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.util.PDFTextStripper;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.file.AsyncFile;
@@ -78,7 +80,7 @@ public class DemoMain extends AbstractVerticle {
 
     private String file2Text(final String fileName) {
         String parsedText = null;
-        PDDocument pdDoc = null;
+        PDDocument doc = null;
         PDFTextStripper pdfStripper;
         final File source = new File(fileName);
         if (!source.exists()) {
@@ -86,19 +88,25 @@ public class DemoMain extends AbstractVerticle {
         }
 
         try {
+            doc = PDDocument.load(source);
+            
+            if (doc.isEncrypted()) {
+                doc.openProtection(new StandardDecryptionMaterial(""));
+            }
+ 
             pdfStripper = new PDFTextStripper();
-            pdDoc = PDDocument.load(source);
-
-            parsedText = pdfStripper.getText(pdDoc);
+            parsedText = pdfStripper.getText(doc);
 
         } catch (final Exception e) {
             e.printStackTrace();
+            parsedText = e.getClass().getName()+ ": " + e.getMessage();
             try {
-                if (pdDoc != null) {
-                    pdDoc.close();
+                if (doc != null) {
+                    doc.close();
                 }
             } catch (final Exception e1) {
-                e.printStackTrace();
+                e1.printStackTrace();
+                parsedText = (parsedText == null) ? e1.getMessage() : (parsedText + e1.getMessage());
             }
 
         }
