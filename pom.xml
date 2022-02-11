@@ -11,7 +11,7 @@
 	<properties>
 		<!-- Software versions -->
 		<java.version>1.8</java.version>
-		<vertx.version>3.7.1</vertx.version>
+		<vertx.version>3.9.4</vertx.version>
 		<pdfbox.version>1.8.16</pdfbox.version><!-- 2.0.11 -->
 		<bouncycastle.version>1.46</bouncycastle.version>
 	</properties>
